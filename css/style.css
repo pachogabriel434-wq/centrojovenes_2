@@ -1,0 +1,93 @@
+/* Ajustes de Scrollbar y Celulares */
+.dark ::-webkit-scrollbar { width: 8px; }
+.dark ::-webkit-scrollbar-track { background: #1e293b; }
+.dark ::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
+.custom-height { max-height: 400px; }
+@media (min-width: 1024px) {
+    .custom-height { height: calc(100vh - 250px); max-height: none; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInBg {
+    from { opacity: 0; }
+    to { opacity: 0.2; }
+}
+
+@keyframes slideUpFade {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.4s ease-out forwards;
+}
+
+.animate-fade-in-bg {
+    animation: fadeInBg 1.5s ease-out forwards;
+}
+
+.animate-slide-up-fade {
+    animation: slideUpFade 0.8s ease-out forwards;
+    animation-fill-mode: both;
+}
+
+#app-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+#app-content::-webkit-scrollbar-thumb {
+    background: #e2e8f0;
+    border-radius: 10px;
+}
+
+.calendar-day {
+    min-height: 100px;
+    background: white;
+    padding: 10px;
+    transition: all 0.2s;
+}
+
+.calendar-day:hover {
+    background: #f8fafc;
+}
+
+.calendar-day.today {
+    background: #eff6ff;
+}
+
+.calendar-day.today span {
+    background: #3b82f6;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 6px;
+}
+
+.reply-border {
+    border-left: 3px solid #e2e8f0;
+    margin-left: 20px;
+}
+
+/* --- Sidebar Expandible / Minimizable --- */
+@media (min-width: 768px) {
+    /* Si está fijado (pinned), sobreescribimos Tailwind para forzar w-64 */
+    .sidebar-pinned {
+        width: 16rem !important; /* w-64 */
+    }
+    
+    /* Ocultar textos cuando NO está fijado y NO tiene hover */
+    .sidebar-state:not(.sidebar-pinned):not(:hover) .sidebar-text {
+        opacity: 0;
+        width: 0;
+        margin-left: 0;
+        padding: 0;
+    }
+
+    .sidebar-state:not(.sidebar-pinned):not(:hover) .avatar-wrapper {
+        width: 2.5rem; /* w-10 */
+        height: 2.5rem; /* h-10 */
+    }
+}
