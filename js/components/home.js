@@ -2,43 +2,10 @@ document.body.insertAdjacentHTML('beforeend', `
     <template id="tpl-home">
         <div class="flex flex-col h-full gap-6 max-w-7xl mx-auto w-full">
             
-            <!-- Header Institucional CDE (Minimalista y Animado) -->
-            <div class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl rounded-3xl shadow-sm border border-slate-200/50 dark:border-slate-800/50 p-4 md:p-5 flex flex-wrap items-center justify-between gap-4 animate-fade-in shrink-0">
-                <!-- Izquierda: Logo y CDE -->
-                <div class="flex items-center gap-4">
-                    <div class="w-14 h-14 rounded-full overflow-hidden shadow-sm border-2 border-slate-100 dark:border-slate-700 bg-transparent flex-shrink-0 hover:scale-110 hover:rotate-6 transition-transform duration-300">
-                        <img src="./img/images.png" alt="Logo CDE" class="w-full h-full object-contain drop-shadow-md p-1">
-                    </div>
-                    <h1 class="text-4xl font-black bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent tracking-tighter hover:scale-105 transition-transform duration-300 cursor-default">CDE</h1>
-                </div>
-                
-                <!-- Centro/Derecha: Título Institucional -->
-                <div class="flex-1 text-center md:text-right md:mr-6">
-                    <h2 class="text-sm md:text-lg font-bold text-slate-600 dark:text-slate-300 tracking-wide">
-                        I.S.F.D. y T. Nº 57 <span class="text-blue-500 font-black">“Juana Paula Manso”</span>
-                    </h2>
-                </div>
-
-                <!-- Emoticones Funcionales y Animados -->
-                <div class="flex items-center justify-center gap-4 md:gap-5 w-full md:w-auto mt-2 md:mt-0 pt-3 md:pt-0 border-t md:border-t-0 border-slate-100 dark:border-slate-800">
-                    <button onclick="navigate('foro')" class="text-3xl hover:scale-125 hover:-translate-y-2 hover:-rotate-12 transition-all duration-300 drop-shadow-sm" title="Ir al Foro">💬</button>
-                    <button onclick="navigate('calendario')" class="text-3xl hover:scale-125 hover:-translate-y-2 hover:rotate-12 transition-all duration-300 drop-shadow-sm" title="Ver Calendario">📅</button>
-                    <button onclick="navigate('materias')" class="text-3xl hover:scale-125 hover:-translate-y-2 hover:-rotate-12 transition-all duration-300 drop-shadow-sm" title="Mis Materias">📚</button>
-                    <button onclick="toggleDarkMode()" class="text-3xl hover:scale-125 hover:-translate-y-2 hover:rotate-180 transition-all duration-500 drop-shadow-sm" title="Cambiar Tema">🌗</button>
-                </div>
-            </div>
-
             <!-- Banner de Bienvenida -->
             <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl p-6 md:p-8 shadow-xl text-white relative overflow-hidden shrink-0 animate-fadeIn">
                 <div class="relative z-10">
                     <h2 class="text-3xl md:text-4xl font-black mb-2">Bienvenido/a, <span id="home-welcome-name" class="text-yellow-300"></span>! 👋</h2>
-                    <p class="text-blue-100 mb-6 text-sm md:text-base">¿Qué deseas hacer hoy? Aquí tienes algunos accesos rápidos.</p>
-                    <div class="flex flex-wrap gap-3">
-                        <button onclick="navigate('calendario')" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 transition-all px-5 py-2 rounded-xl font-bold flex items-center gap-2 text-sm shadow-sm"><i class="fas fa-calendar-check"></i> Calendario</button>
-                        <button onclick="navigate('horarios')" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 transition-all px-5 py-2 rounded-xl font-bold flex items-center gap-2 text-sm shadow-sm"><i class="fas fa-clock"></i> Horarios</button>
-                        <button onclick="navigate('foro')" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 transition-all px-5 py-2 rounded-xl font-bold flex items-center gap-2 text-sm shadow-sm"><i class="fas fa-comments"></i> Foro</button>
-                        <button onclick="navigate('materias')" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 transition-all px-5 py-2 rounded-xl font-bold flex items-center gap-2 text-sm shadow-sm"><i class="fas fa-book-open"></i> Materias</button>
-                    </div>
                 </div>
                 <!-- Elementos decorativos -->
                 <div class="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-white opacity-10 blur-3xl pointer-events-none"></div>
