@@ -1,24 +1,35 @@
 document.body.insertAdjacentHTML('beforeend', `
     <template id="tpl-calendario">
-        <div class="max-w-6xl mx-auto flex flex-col lg:flex-row gap-6 h-full pb-10">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 h-full pb-10 animate-fadeIn">
             <!-- Sidebar de Eventos Arrastrables -->
-            <div id="external-events" class="w-full lg:w-64 bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-xl border dark:border-slate-800 h-fit lg:sticky lg:top-0">
-                <h4 class="font-black text-slate-800 dark:text-white mb-4 uppercase text-xs tracking-widest">Atajos / Eventos</h4>
-                <div id="external-events-list" class="space-y-2">
-                    <div class='fc-event bg-blue-600 text-white p-3 rounded-2xl cursor-move text-xs font-bold shadow-sm hover:scale-105 transition-transform'>Examen Final</div>
-                    <div class='fc-event bg-indigo-600 text-white p-3 rounded-2xl cursor-move text-xs font-bold shadow-sm hover:scale-105 transition-transform'>Entrega Trabajo</div>
-                    <div class='fc-event bg-emerald-600 text-white p-3 rounded-2xl cursor-move text-xs font-bold shadow-sm hover:scale-105 transition-transform'>Clase Especial</div>
-                    <div class='fc-event bg-amber-500 text-white p-3 rounded-2xl cursor-move text-xs font-bold shadow-sm hover:scale-105 transition-transform'>Estudiar</div>
+            <div id="external-events" class="w-full lg:w-72 bg-white dark:bg-slate-900 rounded-[2.5rem] p-0 shadow-2xl border dark:border-slate-800 h-fit lg:sticky lg:top-0 overflow-hidden">
+                <div class="bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-700 p-8 text-white shadow-lg">
+                    <h4 class="font-black uppercase text-[10px] tracking-[0.3em] mb-2 opacity-70">Planificador</h4>
+                    <h3 class="text-2xl font-black leading-tight">Eventos Rápidos</h3>
+                    <p class="text-[11px] mt-2 text-blue-100/80 italic">Arrastra los bloques al calendario.</p>
                 </div>
-                <div class="mt-6 pt-6 border-t dark:border-slate-800">
-                    <label class="flex items-center gap-2 text-[10px] font-bold uppercase text-slate-400 cursor-pointer">
-                        <input type="checkbox" id="drop-remove" class="rounded accent-blue-500"> Quitar al soltar
-                    </label>
+                <div class="p-6">
+                    <div id="external-events-list" class="space-y-3">
+                        <div class='fc-event bg-blue-500/10 text-blue-600 dark:text-blue-400 border-2 border-dashed border-blue-500/30 p-4 rounded-2xl cursor-move text-xs font-black shadow-sm hover:bg-blue-600 hover:text-white hover:border-solid hover:scale-105 transition-all'>Examen Final</div>
+                        <div class='fc-event bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-2 border-dashed border-indigo-500/30 p-4 rounded-2xl cursor-move text-xs font-black shadow-sm hover:bg-indigo-600 hover:text-white hover:border-solid hover:scale-105 transition-all'>Entrega Trabajo</div>
+                        <div class='fc-event bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-2 border-dashed border-emerald-500/30 p-4 rounded-2xl cursor-move text-xs font-black shadow-sm hover:bg-emerald-600 hover:text-white hover:border-solid hover:scale-105 transition-all'>Clase Especial</div>
+                        <div class='fc-event bg-amber-500/10 text-amber-600 dark:text-amber-400 border-2 border-dashed border-amber-500/30 p-4 rounded-2xl cursor-move text-xs font-black shadow-sm hover:bg-amber-600 hover:text-white hover:border-solid hover:scale-105 transition-all'>Estudiar</div>
+                    </div>
+                    <div class="mt-8 pt-6 border-t dark:border-slate-800">
+                        <label class="flex items-center gap-3 text-[10px] font-black uppercase text-slate-400 cursor-pointer group">
+                            <div class="relative w-10 h-6">
+                                <input type="checkbox" id="drop-remove" class="peer hidden">
+                                <div class="w-full h-full bg-slate-200 dark:bg-slate-700 rounded-full peer-checked:bg-blue-600 transition-colors shadow-inner"></div>
+                                <div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-4 shadow-sm"></div>
+                            </div>
+                            Quitar al soltar
+                        </label>
+                    </div>
                 </div>
             </div>
 
             <!-- Contenedor del Calendario -->
-            <div class="flex-1 bg-white dark:bg-slate-900 rounded-3xl shadow-xl p-6 border dark:border-slate-800 min-h-[600px]">
+            <div class="flex-1 bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl p-8 border dark:border-slate-800 min-h-[700px]">
                 <div id="calendar" class="h-full"></div>
             </div>
         </div>
