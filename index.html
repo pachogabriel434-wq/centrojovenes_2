@@ -10,6 +10,22 @@
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+    <style>
+        /* Ajustes de integración para FullCalendar y Modo Oscuro */
+        .dark .fc {
+            --fc-border-color: #334155;
+            --fc-page-bg-color: #0f172a;
+            --fc-neutral-bg-color: #1e293b;
+            color: #f1f5f9;
+        }
+        .dark .fc-theme-standard td, .dark .fc-theme-standard th { border-color: #1e293b; }
+        .dark .fc-col-header-cell-cushion, .dark .fc-daygrid-day-number, .dark .fc-list-day-text, .dark .fc-list-day-side-text { color: #94a3b8; }
+        .dark .fc-list-event:hover td { background-color: #1e293b; }
+        .dark .fc-button-primary { background-color: #3b82f6; border-color: #3b82f6; }
+        .dark .fc-button-primary:disabled { background-color: #1e293b; border-color: #1e293b; }
+        .fc-event { transition: transform 0.2s; }
+    </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans h-screen flex overflow-hidden transition-colors duration-300">
 
