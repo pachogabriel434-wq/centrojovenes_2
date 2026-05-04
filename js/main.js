@@ -14,9 +14,22 @@ let currentMonth = currentDate.getMonth();
 let currentYear = currentDate.getFullYear();
 const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
 
-function isPrivileged() {
-    return currentUser && (currentUser.includes('admin') || currentUser.includes('profe'));
+function getUserRole(email) {
+    if (!email) return 'alumno';
+    if (email === 'admin@admin.com') {
+        if (!userProfiles[email]) {
+            userProfiles[email] = { password: 'admin', role: 'admin', nickname: 'Administrador' };
+            localStorage.setItem('app_profiles', JSON.stringify(userProfiles));
+        }
+        return 'admin';
+    }
+    const profile = userProfiles[email];
+    return profile ? (profile.role || 'alumno') : 'alumno';
 }
+
+function isAdmin() { return getUserRole(currentUser) === 'admin'; }
+function isDelegado() { const r = getUserRole(currentUser); return r === 'admin' || r === 'delegado'; }
+function isDocente() { const r = getUserRole(currentUser); return r === 'admin' || r === 'docente'; }
 
 // --- MOTOR DE NAVEGACIÓN ---
 function navigate(page) {
@@ -57,7 +70,7 @@ function updateNotifications() {
     const bellContainer = document.getElementById('notification-bell-container');
     if (!bellContainer) return;
 
-    if (isPrivileged()) {
+    if (getUserRole(currentUser) !== 'alumno') {
         bellContainer.classList.add('hidden');
         return;
     }

@@ -52,7 +52,7 @@ function renderHome() {
     const welcomeNameEl = document.getElementById('home-welcome-name');
     if (welcomeNameEl) welcomeNameEl.innerText = nickname;
 
-    if (isPrivileged()) {
+    if (isDelegado()) {
         document.getElementById('admin-news-panel').classList.remove('hidden');
         document.getElementById('admin-event-panel').classList.remove('hidden');
     }
@@ -69,6 +69,7 @@ function postNews() {
     const authorName = profile.nickname || currentUser.split('@')[0];
 
     globalNews.unshift({
+        id: Date.now(),
         author: authorName,
         content: text,
         image: img,
@@ -89,11 +90,20 @@ function renderNews() {
                 <span class="bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">Staff</span>
                 <span class="text-xs font-bold">${n.author}</span>
                 <span class="text-[10px] text-slate-400 ml-auto">${n.date}</span>
+                ${isDelegado() ? `<button onclick="deleteNews(${n.id})" class="text-red-400 hover:text-red-600 ml-2 transition" title="Eliminar Publicación"><i class="fas fa-trash-alt"></i></button>` : ''}
             </div>
             <p class="text-sm mb-3 break-words">${n.content.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="text-blue-500 underline break-all">$1</a>')}</p>
             ${n.image ? `<img src="${n.image}" class="rounded-xl w-full h-40 object-cover border dark:border-slate-600">` : ''}
         </div>
     `).join('');
+}
+
+function deleteNews(id) {
+    if (confirm("¿Seguro que deseas eliminar esta novedad?")) {
+        globalNews = globalNews.filter(n => n.id !== id);
+        localStorage.setItem('app_news', JSON.stringify(globalNews));
+        renderNews();
+    }
 }
 
 function postEvent() {
@@ -127,12 +137,23 @@ function renderGlobalEvents() {
             
             <div class="mt-3 flex flex-wrap items-center justify-between gap-2">
                 <span class="text-[10px] font-medium whitespace-nowrap"><i class="fas fa-users mr-1"></i> ${e.attendees.length} inscriptos</span>
-                <button onclick="toggleInscribe(${e.id})" class="px-4 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap ${isInscribed ? 'bg-red-100 text-red-600 dark:bg-red-900/30' : 'bg-indigo-600 text-white hover:bg-indigo-700'}">
-                    ${isInscribed ? 'Cancelar' : 'Inscribirme'}
-                </button>
+                <div class="flex gap-2">
+                    ${isDelegado() ? `<button onclick="deleteEvent(${e.id})" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-red-100 text-red-600 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-900/50 transition"><i class="fas fa-trash"></i></button>` : ''}
+                    <button onclick="toggleInscribe(${e.id})" class="px-4 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap ${isInscribed ? 'bg-red-100 text-red-600 dark:bg-red-900/30' : 'bg-indigo-600 text-white hover:bg-indigo-700'}">
+                        ${isInscribed ? 'Cancelar' : 'Inscribirme'}
+                    </button>
+                </div>
             </div>
         </div>
     `}).join('');
+}
+
+function deleteEvent(id) {
+    if (confirm("¿Seguro que deseas cancelar este evento?")) {
+        globalEvents = globalEvents.filter(e => e.id !== id);
+        localStorage.setItem('app_global_events', JSON.stringify(globalEvents));
+        renderGlobalEvents();
+    }
 }
 
 function toggleInscribe(id) {
