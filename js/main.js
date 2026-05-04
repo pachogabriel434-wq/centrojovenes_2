@@ -62,6 +62,7 @@ function navigate(page) {
         if (page === 'foro') renderForo();
         if (page === 'horarios') renderSchedule();
         if (page === 'materias') renderMaterias();
+        if (page === 'instructivos') renderInstructivos();
     }
 }
 
