@@ -67,10 +67,12 @@ function renderSchedule() {
 
 function editSubject(rowIndex, dayKey) {
     const currentVal = userSchedules[currentUser][rowIndex][dayKey];
-    const newVal = prompt("Nombre de la materia:", currentVal);
-    if (newVal !== null) {
-        userSchedules[currentUser][rowIndex][dayKey] = newVal;
-        localStorage.setItem('app_schedules', JSON.stringify(userSchedules));
-        renderSchedule();
-    }
+    showModalPrompt("Editar Horario", "Ingresa el nombre de la materia o actividad:", currentVal, (newVal) => {
+        if (newVal !== null) {
+            userSchedules[currentUser][rowIndex][dayKey] = newVal;
+            localStorage.setItem('app_schedules', JSON.stringify(userSchedules));
+            showToast("Horario actualizado correctamente", "success");
+            renderSchedule();
+        }
+    });
 }

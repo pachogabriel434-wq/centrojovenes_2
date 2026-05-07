@@ -214,11 +214,15 @@ function saveSubject() {
     const desc = document.getElementById('subj-desc').value.trim();
     const teacherInput = document.getElementById('subj-teacher');
     let teacher = teacherInput ? teacherInput.value.trim() : '';
-    if (!name) return alert("El nombre es obligatorio");
+    if (!name) {
+        showToast("El nombre de la materia es obligatorio", "warning");
+        return;
+    }
     if (!teacher) teacher = userProfiles[currentUser]?.nickname || currentUser.split('@')[0];
     
     globalSubjects.push({ id: Date.now(), name, desc, teacher: teacher, posts: [] });
     localStorage.setItem('app_subjects', JSON.stringify(globalSubjects));
+    showToast("Materia creada correctamente", "success");
     renderMaterias();
 }
 
@@ -235,7 +239,10 @@ async function savePost(subjectId, type) {
     const title = document.getElementById(`${type}-title`).value.trim();
     const content = document.getElementById(`${type}-content`).value.trim();
     const fileInput = document.getElementById(`${type}-file`);
-    if (!title || !content) return alert("Título y contenido obligatorios");
+    if (!title || !content) {
+        showToast("El título y el contenido son obligatorios", "warning");
+        return;
+    }
     
     const fileBase64 = await getBase64(fileInput.files[0]);
     const subject = globalSubjects.find(s => s.id === subjectId);
@@ -255,13 +262,17 @@ async function savePost(subjectId, type) {
     localStorage.setItem('app_notifications', JSON.stringify(globalNotifications));
     if (typeof updateNotifications === 'function') updateNotifications();
 
+    showToast("Publicación realizada con éxito", "success");
     openSubject(subjectId);
 }
 
 async function submitTask(subjectId, postId) {
     const fileInput = document.getElementById(`task-file-${postId}`);
     const comment = document.getElementById(`task-comment-${postId}`).value.trim();
-    if (!fileInput.files[0]) return alert("Debes adjuntar un archivo para entregar.");
+    if (!fileInput.files[0]) {
+        showToast("Debes adjuntar un archivo para realizar la entrega", "error");
+        return;
+    }
     
     const fileBase64 = await getBase64(fileInput.files[0]);
     const subject = globalSubjects.find(s => s.id === subjectId);
@@ -269,6 +280,7 @@ async function submitTask(subjectId, postId) {
     
     post.submissions.push({ studentId: currentUser, studentName: userProfiles[currentUser]?.nickname || currentUser.split('@')[0], fileBase64, comment, date: new Date().toLocaleString() });
     localStorage.setItem('app_subjects', JSON.stringify(globalSubjects));
+    showToast("¡Trabajo entregado con éxito!", "success");
     openSubject(subjectId);
 }
 
