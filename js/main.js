@@ -8,6 +8,7 @@ let globalEvents = JSON.parse(localStorage.getItem('app_global_events') || '[]')
 let userProfiles = JSON.parse(localStorage.getItem('app_profiles') || '{}');
 let globalSubjects = JSON.parse(localStorage.getItem('app_subjects') || '[]');
 let globalNotifications = JSON.parse(localStorage.getItem('app_notifications') || '[]');
+let currentHomeCategory = 'institucional'; // Estado global de la categoría de inicio
 
 let currentDate = new Date();
 let currentMonth = currentDate.getMonth();
@@ -201,6 +202,17 @@ function showModalPrompt(title, label, defaultValue, callback) {
     };
 }
 
+// --- SISTEMA DE DROPDOWNS PERSONALIZADOS (PARA HOME CATEGORÍAS) ---
+function toggleCategoryDropdown() {
+    const dropdown = document.getElementById('home-category-dropdown');
+    const icon = document.getElementById('category-dropdown-icon');
+    if (dropdown && icon) {
+        const isHidden = dropdown.classList.toggle('hidden');
+        if (isHidden) icon.classList.remove('rotate-180');
+        else icon.classList.add('rotate-180');
+    }
+}
+
 // --- SIDEBAR LOGIC ---
 let isSidebarPinned = localStorage.getItem('sidebar_pinned') !== 'false'; // Por defecto fijado
 
@@ -238,5 +250,19 @@ document.addEventListener("DOMContentLoaded", () => {
     if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
     
     applySidebarPinState();
+
+    // Global click listener for dropdowns (e.g., home category dropdown)
+    document.addEventListener('click', (event) => {
+        // Handle home category dropdown
+        const dropdownButton = document.getElementById('category-dropdown-button');
+        const dropdownContent = document.getElementById('home-category-dropdown');
+        const icon = document.getElementById('category-dropdown-icon');
+
+        if (dropdownContent && !dropdownContent.classList.contains('hidden') &&
+            !dropdownButton.contains(event.target) && !dropdownContent.contains(event.target)) {
+            dropdownContent.classList.add('hidden');
+            if (icon) icon.classList.remove('rotate-180');
+        }
+    });
     navigate('login');
 });

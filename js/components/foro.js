@@ -5,7 +5,7 @@ document.body.insertAdjacentHTML('beforeend', `
                 <h3 class="font-black text-slate-800 dark:text-white mb-4 uppercase text-sm tracking-widest">Publicar en el Foro</h3>
                 <textarea id="forum-input" class="w-full border-2 border-slate-50 dark:border-slate-800 dark:bg-slate-800 dark:text-white rounded-2xl p-4 focus:border-blue-400 outline-none transition resize-none" rows="3" placeholder="¿Tienes alguna duda académica?"></textarea>
                 <div class="flex justify-end mt-3">
-                    <button onclick="savePost()" class="bg-blue-600 text-white px-8 py-3 rounded-2xl font-bold hover:bg-blue-700 transition">Enviar</button>
+                    <button onclick="saveForumPost()" class="bg-blue-600 text-white px-8 py-3 rounded-2xl font-bold hover:bg-blue-700 transition">Enviar</button>
                 </div>
             </div>
             <div id="forum-list" class="space-y-4"></div>
@@ -73,7 +73,7 @@ function renderForo() {
     }).join('');
 }
 
-function savePost() {
+function saveForumPost() {
     const input = document.getElementById('forum-input');
     const content = input.value.trim();
     if (!content) return;
@@ -90,6 +90,7 @@ function savePost() {
     forumPosts.unshift(newPost);
     localStorage.setItem('app_forum', JSON.stringify(forumPosts));
     input.value = '';
+    showToast("Consulta publicada con éxito", "success");
     renderForo();
 }
 
