@@ -84,30 +84,35 @@ function renderCalendar() {
             const key = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
             userEvents[currentUser][key] = info.draggedEl.innerText.trim();
             localStorage.setItem('app_events', JSON.stringify(userEvents));
+            showToast("Evento programado", "info");
         },
 
         // Clic en un día vacío para agregar nota manual
         dateClick: function(info) {
-            const val = prompt("Agregar nota para este día:");
-            if (val) {
-                const d = info.date;
-                const key = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
-                userEvents[currentUser][key] = val;
-                localStorage.setItem('app_events', JSON.stringify(userEvents));
-                renderCalendar();
-            }
+            showModalPrompt("Nueva Nota", "Escribe un recordatorio para este día:", "", (val) => {
+                if (val) {
+                    const d = info.date;
+                    const key = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+                    userEvents[currentUser][key] = val;
+                    localStorage.setItem('app_events', JSON.stringify(userEvents));
+                    showToast("Nota guardada en el calendario", "success");
+                    renderCalendar();
+                }
+            });
         },
 
         // Clic en un evento existente para editar o borrar
         eventClick: function(info) {
             const key = info.event.id;
             const current = userEvents[currentUser][key];
-            const val = prompt("Editar nota (deja vacío para eliminar):", current);
-            if (val === null) return;
-            if (val.trim() === "") delete userEvents[currentUser][key];
-            else userEvents[currentUser][key] = val;
-            localStorage.setItem('app_events', JSON.stringify(userEvents));
-            renderCalendar();
+            showModalPrompt("Editar Evento", "Modifica tu nota (borra todo para eliminar):", current, (val) => {
+                if (val === null) return;
+                if (val.trim() === "") delete userEvents[currentUser][key];
+                else userEvents[currentUser][key] = val;
+                localStorage.setItem('app_events', JSON.stringify(userEvents));
+                showToast("Cambios guardados", "success");
+                renderCalendar();
+            });
         },
 
         // Actualizar fecha al arrastrar un evento dentro del calendario
@@ -119,6 +124,7 @@ function renderCalendar() {
             delete userEvents[currentUser][oldKey];
             userEvents[currentUser][newKey] = content;
             localStorage.setItem('app_events', JSON.stringify(userEvents));
+            showToast("Fecha actualizada", "success");
             renderCalendar();
         }
     });

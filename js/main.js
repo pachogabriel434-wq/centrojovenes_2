@@ -102,6 +102,92 @@ function clearNotifications() {
     updateNotifications();
 }
 
+// --- SISTEMA DE ALERTAS PERSONALIZADAS (TOAST) ---
+function showToast(message, type = 'info') {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    
+    // Configuración según el tipo
+    const configs = {
+        success: { icon: 'fa-check-circle', color: 'border-emerald-500 text-emerald-600 dark:text-emerald-400' },
+        error: { icon: 'fa-exclamation-circle', color: 'border-red-500 text-red-600 dark:text-red-400' },
+        warning: { icon: 'fa-exclamation-triangle', color: 'border-amber-500 text-amber-600 dark:text-amber-400' },
+        info: { icon: 'fa-info-circle', color: 'border-blue-500 text-blue-600 dark:text-blue-400' }
+    };
+
+    const config = configs[type] || configs.info;
+
+    toast.className = `pointer-events-auto flex items-center gap-3 p-4 min-w-[300px] bg-white dark:bg-slate-900 border-l-4 ${config.color} shadow-2xl rounded-2xl animate-slide-up-fade overflow-hidden`;
+    
+    toast.innerHTML = `
+        <i class="fas ${config.icon} text-xl"></i>
+        <div class="flex-1">
+            <p class="text-sm font-black">${message}</p>
+        </div>
+        <button class="text-slate-400 hover:text-slate-600 dark:hover:text-white transition-colors">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+
+    // Auto-eliminar
+    const removeToast = () => {
+        toast.classList.add('opacity-0', 'translate-x-full');
+        toast.style.transition = 'all 0.4s ease';
+        setTimeout(() => toast.remove(), 400);
+    };
+
+    toast.querySelector('button').onclick = removeToast;
+    container.appendChild(toast);
+    setTimeout(removeToast, 4000);
+}
+
+// --- SISTEMA DE MODALES PERSONALIZADOS (REEMPLAZO DE PROMPT) ---
+function showModalPrompt(title, label, defaultValue, callback) {
+    const container = document.getElementById('modal-container');
+    if (!container) return;
+
+    container.innerHTML = `
+        <div class="bg-white dark:bg-slate-900 w-full max-w-md p-8 rounded-3xl shadow-2xl border dark:border-slate-800 animate-slide-up-fade">
+            <h3 class="text-xl font-black text-slate-800 dark:text-white mb-2">${title}</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">${label}</p>
+            <input type="text" id="modal-prompt-input" class="w-full mb-6 border-2 border-slate-100 dark:border-slate-800 dark:bg-slate-800 dark:text-white rounded-2xl p-4 outline-none focus:border-blue-500 font-bold" autofocus>
+            <div class="flex gap-3">
+                <button id="modal-cancel" class="flex-1 px-4 py-4 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded-2xl font-bold hover:bg-slate-200 dark:hover:bg-slate-700 transition">Cancelar</button>
+                <button id="modal-confirm" class="flex-1 px-4 py-4 bg-blue-600 text-white rounded-2xl font-bold hover:bg-blue-700 transition">Guardar</button>
+            </div>
+        </div>
+    `;
+
+    const input = document.getElementById('modal-prompt-input');
+    input.value = defaultValue || '';
+    container.classList.remove('hidden');
+    
+    setTimeout(() => {
+        input.focus();
+        input.select();
+    }, 50);
+
+    const close = () => container.classList.add('hidden');
+
+    document.getElementById('modal-cancel').onclick = () => {
+        close();
+        callback(null);
+    };
+
+    document.getElementById('modal-confirm').onclick = () => {
+        const val = input.value.trim();
+        close();
+        callback(val);
+    };
+
+    input.onkeydown = (e) => {
+        if (e.key === 'Enter') document.getElementById('modal-confirm').click();
+        if (e.key === 'Escape') document.getElementById('modal-cancel').click();
+    };
+}
+
 // --- SIDEBAR LOGIC ---
 let isSidebarPinned = localStorage.getItem('sidebar_pinned') !== 'false'; // Por defecto fijado
 

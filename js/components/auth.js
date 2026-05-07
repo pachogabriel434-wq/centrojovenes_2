@@ -40,7 +40,7 @@ function initLogin() {
 
         if (userProfiles[email] && userProfiles[email].password) {
             if (userProfiles[email].password !== pass) {
-                alert("Contraseña incorrecta");
+                showToast("Contraseña incorrecta. Inténtalo de nuevo.", "error");
                 return;
             }
         }
