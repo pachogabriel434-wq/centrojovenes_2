@@ -12,7 +12,7 @@ function renderMaterias() {
     let html = `
         <div class="flex justify-between items-center mb-6 border-b dark:border-slate-800 pb-4">
             <h2 class="text-3xl font-black text-slate-800 dark:text-white"><i class="fas fa-book-open text-blue-500 mr-2"></i> Mis Materias</h2>
-            ${isPrivileged() ? `<button onclick="toggleForm('form-new-subject')" class="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-blue-700 transition shadow-md"><i class="fas fa-plus mr-1"></i> Nueva Materia</button>` : ''}
+            ${isDocente() ? `<button onclick="toggleForm('form-new-subject')" class="bg-blue-600 text-white px-5 py-2.5 rounded-xl font-bold hover:bg-blue-700 transition shadow-md"><i class="fas fa-plus mr-1"></i> Nueva Materia</button>` : ''}
         </div>
         
         <!-- Formulario Oculto: Nueva Materia (Solo Profes/Admins) -->
@@ -70,7 +70,7 @@ function openSubject(id) {
             <i class="fas fa-book-reader absolute -right-10 -bottom-10 text-9xl text-white/10"></i>
         </div>
 
-        ${isPrivileged() ? `
+        ${isDocente() ? `
         <!-- Botón Flotante Animado para Profesores -->
         <div class="relative flex justify-end mb-6 z-20">
             <div id="fab-menu" class="hidden absolute top-16 right-0 flex flex-col gap-3 items-end transition-all">
@@ -130,7 +130,7 @@ function openSubject(id) {
 
                 ${isTarea ? `
                     <div class="mt-4 pt-4 border-t dark:border-slate-800">
-                        ${isPrivileged() ? `
+                        ${isDocente() ? `
                             <button onclick="toggleForm('subs-${post.id}')" class="text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-blue-500"><i class="fas fa-users"></i> Ver Entregas (${post.submissions.length})</button>
                             <div id="subs-${post.id}" class="hidden mt-4 space-y-3 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl">
                                 ${post.submissions.length === 0 ? '<p class="text-xs italic text-slate-400">Nadie ha entregado el trabajo aún.</p>' : 

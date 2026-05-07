@@ -51,6 +51,26 @@ document.body.insertAdjacentHTML('beforeend', `
                     <i class="fas fa-pencil-alt mr-2"></i> Editar Perfil
                 </button>
             </div>
+            
+            <!-- Panel de Administración (Solo Administradores) -->
+            <div id="admin-users-panel" class="hidden border-t-8 border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 p-8">
+                <div class="flex justify-between items-center mb-6 border-b dark:border-slate-800 pb-4">
+                    <h3 class="text-2xl font-black text-slate-800 dark:text-white"><i class="fas fa-users-cog text-blue-500 mr-2"></i>Gestión de Usuarios</h3>
+                </div>
+                <div class="overflow-x-auto rounded-2xl border dark:border-slate-800">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 dark:bg-slate-800/80 dark:text-slate-300 text-xs uppercase tracking-wider">
+                                <th class="p-4 font-bold">Usuario / Email</th>
+                                <th class="p-4 font-bold text-center">Rol Actual</th>
+                                <th class="p-4 font-bold text-right">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-users-list" class="divide-y dark:divide-slate-800 bg-white dark:bg-slate-900">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
             <!-- Modo Edición -->
             <div id="profile-edit-mode" class="hidden p-8 text-left">
@@ -137,7 +157,16 @@ function initProfile() {
     const nickname = profile.nickname || currentUser.split('@')[0].toUpperCase();
     
     document.getElementById('profile-name').innerText = nickname;
-    document.getElementById('profile-email-text').innerText = currentUser;
+    
+    const roleColors = {
+        'admin': 'bg-red-500',
+        'delegado': 'bg-purple-500',
+        'docente': 'bg-blue-500',
+        'alumno': 'bg-green-500'
+    };
+    const userRole = getUserRole(currentUser);
+    const roleColor = roleColors[userRole] || 'bg-slate-500';
+    document.getElementById('profile-email-text').innerHTML = `${currentUser} <span class="ml-2 px-2 py-0.5 rounded-full text-[10px] font-bold text-white uppercase ${roleColor}">${userRole}</span>`;
     
     document.getElementById('profile-dni-text').innerText = profile.dni || '-';
     document.getElementById('profile-dob-text').innerText = profile.dob || '-';
@@ -154,6 +183,13 @@ function initProfile() {
     } else {
         avatarImg.classList.add('hidden');
         avatarIcon.classList.remove('hidden');
+    }
+    
+    if (isAdmin()) {
+        document.getElementById('admin-users-panel').classList.remove('hidden');
+        renderAdminUsersList();
+    } else {
+        document.getElementById('admin-users-panel').classList.add('hidden');
     }
 }
 
@@ -208,6 +244,59 @@ function saveProfileData() {
     updateSidebarData();
     initProfile();
     toggleEditMode();
+}
+
+function renderAdminUsersList() {
+    const listBody = document.getElementById('admin-users-list');
+    let html = '';
+    
+    const roleColors = {
+        'admin': 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+        'delegado': 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400',
+        'docente': 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
+        'alumno': 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'
+    };
+    
+    Object.keys(userProfiles).forEach(email => {
+        const prof = userProfiles[email];
+        const role = prof.role || 'alumno';
+        const colorClass = roleColors[role] || 'bg-slate-100 text-slate-700';
+        
+        html += `
+            <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition group">
+                <td class="p-4">
+                    <div class="font-bold text-slate-800 dark:text-white text-sm">${prof.nickname || email.split('@')[0]}</div>
+                    <div class="text-xs text-slate-500 dark:text-slate-400">${email}</div>
+                </td>
+                <td class="p-4 text-center">
+                    <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${colorClass}">${role}</span>
+                </td>
+                <td class="p-4 text-right">
+                    <select onchange="changeUserRole('${email}', this.value)" class="bg-slate-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl px-3 py-1.5 text-xs font-bold outline-none focus:border-blue-500 text-slate-700 dark:text-slate-300 shadow-sm cursor-pointer">
+                        <option value="" disabled selected>Cambiar Rol</option>
+                        <option value="alumno">Alumno</option>
+                        <option value="docente">Docente</option>
+                        <option value="delegado">Delegado</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                </td>
+            </tr>
+        `;
+    });
+    
+    listBody.innerHTML = html;
+}
+
+function changeUserRole(email, newRole) {
+    if (!newRole) return;
+    if (email === currentUser && newRole !== 'admin' && !confirm("¿Seguro que deseas quitarte los permisos de administrador?")) {
+        renderAdminUsersList();
+        return;
+    }
+    userProfiles[email].role = newRole;
+    localStorage.setItem('app_profiles', JSON.stringify(userProfiles));
+    renderAdminUsersList();
+    if (email === currentUser) initProfile();
 }
 
 function toggleDarkMode() {

@@ -2,43 +2,10 @@ document.body.insertAdjacentHTML('beforeend', `
     <template id="tpl-home">
         <div class="flex flex-col h-full gap-6 max-w-7xl mx-auto w-full">
             
-            <!-- Header Institucional CDE (Minimalista y Animado) -->
-            <div class="bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl rounded-3xl shadow-sm border border-slate-200/50 dark:border-slate-800/50 p-4 md:p-5 flex flex-wrap items-center justify-between gap-4 animate-fade-in shrink-0">
-                <!-- Izquierda: Logo y CDE -->
-                <div class="flex items-center gap-4">
-                    <div class="w-14 h-14 rounded-full overflow-hidden shadow-sm border-2 border-slate-100 dark:border-slate-700 bg-transparent flex-shrink-0 hover:scale-110 hover:rotate-6 transition-transform duration-300">
-                        <img src="./img/images.png" alt="Logo CDE" class="w-full h-full object-contain drop-shadow-md p-1">
-                    </div>
-                    <h1 class="text-4xl font-black bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent tracking-tighter hover:scale-105 transition-transform duration-300 cursor-default">CDE</h1>
-                </div>
-                
-                <!-- Centro/Derecha: Título Institucional -->
-                <div class="flex-1 text-center md:text-right md:mr-6">
-                    <h2 class="text-sm md:text-lg font-bold text-slate-600 dark:text-slate-300 tracking-wide">
-                        I.S.F.D. y T. Nº 57 <span class="text-blue-500 font-black">“Juana Paula Manso”</span>
-                    </h2>
-                </div>
-
-                <!-- Emoticones Funcionales y Animados -->
-                <div class="flex items-center justify-center gap-4 md:gap-5 w-full md:w-auto mt-2 md:mt-0 pt-3 md:pt-0 border-t md:border-t-0 border-slate-100 dark:border-slate-800">
-                    <button onclick="navigate('foro')" class="text-3xl hover:scale-125 hover:-translate-y-2 hover:-rotate-12 transition-all duration-300 drop-shadow-sm" title="Ir al Foro">💬</button>
-                    <button onclick="navigate('calendario')" class="text-3xl hover:scale-125 hover:-translate-y-2 hover:rotate-12 transition-all duration-300 drop-shadow-sm" title="Ver Calendario">📅</button>
-                    <button onclick="navigate('materias')" class="text-3xl hover:scale-125 hover:-translate-y-2 hover:-rotate-12 transition-all duration-300 drop-shadow-sm" title="Mis Materias">📚</button>
-                    <button onclick="toggleDarkMode()" class="text-3xl hover:scale-125 hover:-translate-y-2 hover:rotate-180 transition-all duration-500 drop-shadow-sm" title="Cambiar Tema">🌗</button>
-                </div>
-            </div>
-
             <!-- Banner de Bienvenida -->
             <div class="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl p-6 md:p-8 shadow-xl text-white relative overflow-hidden shrink-0 animate-fadeIn">
                 <div class="relative z-10">
                     <h2 class="text-3xl md:text-4xl font-black mb-2">Bienvenido/a, <span id="home-welcome-name" class="text-yellow-300"></span>! 👋</h2>
-                    <p class="text-blue-100 mb-6 text-sm md:text-base">¿Qué deseas hacer hoy? Aquí tienes algunos accesos rápidos.</p>
-                    <div class="flex flex-wrap gap-3">
-                        <button onclick="navigate('calendario')" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 transition-all px-5 py-2 rounded-xl font-bold flex items-center gap-2 text-sm shadow-sm"><i class="fas fa-calendar-check"></i> Calendario</button>
-                        <button onclick="navigate('horarios')" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 transition-all px-5 py-2 rounded-xl font-bold flex items-center gap-2 text-sm shadow-sm"><i class="fas fa-clock"></i> Horarios</button>
-                        <button onclick="navigate('foro')" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 transition-all px-5 py-2 rounded-xl font-bold flex items-center gap-2 text-sm shadow-sm"><i class="fas fa-comments"></i> Foro</button>
-                        <button onclick="navigate('materias')" class="bg-white/20 hover:bg-white/30 backdrop-blur-sm border border-white/30 transition-all px-5 py-2 rounded-xl font-bold flex items-center gap-2 text-sm shadow-sm"><i class="fas fa-book-open"></i> Materias</button>
-                    </div>
                 </div>
                 <!-- Elementos decorativos -->
                 <div class="absolute -top-24 -right-24 w-64 h-64 rounded-full bg-white opacity-10 blur-3xl pointer-events-none"></div>
@@ -85,7 +52,7 @@ function renderHome() {
     const welcomeNameEl = document.getElementById('home-welcome-name');
     if (welcomeNameEl) welcomeNameEl.innerText = nickname;
 
-    if (isPrivileged()) {
+    if (isDelegado()) {
         document.getElementById('admin-news-panel').classList.remove('hidden');
         document.getElementById('admin-event-panel').classList.remove('hidden');
     }
@@ -102,6 +69,7 @@ function postNews() {
     const authorName = profile.nickname || currentUser.split('@')[0];
 
     globalNews.unshift({
+        id: Date.now(),
         author: authorName,
         content: text,
         image: img,
@@ -122,11 +90,20 @@ function renderNews() {
                 <span class="bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300 text-[10px] px-2 py-0.5 rounded-full font-bold uppercase">Staff</span>
                 <span class="text-xs font-bold">${n.author}</span>
                 <span class="text-[10px] text-slate-400 ml-auto">${n.date}</span>
+                ${isDelegado() ? `<button onclick="deleteNews(${n.id})" class="text-red-400 hover:text-red-600 ml-2 transition" title="Eliminar Publicación"><i class="fas fa-trash-alt"></i></button>` : ''}
             </div>
             <p class="text-sm mb-3 break-words">${n.content.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="text-blue-500 underline break-all">$1</a>')}</p>
             ${n.image ? `<img src="${n.image}" class="rounded-xl w-full h-40 object-cover border dark:border-slate-600">` : ''}
         </div>
     `).join('');
+}
+
+function deleteNews(id) {
+    if (confirm("¿Seguro que deseas eliminar esta novedad?")) {
+        globalNews = globalNews.filter(n => n.id !== id);
+        localStorage.setItem('app_news', JSON.stringify(globalNews));
+        renderNews();
+    }
 }
 
 function postEvent() {
@@ -160,12 +137,23 @@ function renderGlobalEvents() {
             
             <div class="mt-3 flex flex-wrap items-center justify-between gap-2">
                 <span class="text-[10px] font-medium whitespace-nowrap"><i class="fas fa-users mr-1"></i> ${e.attendees.length} inscriptos</span>
-                <button onclick="toggleInscribe(${e.id})" class="px-4 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap ${isInscribed ? 'bg-red-100 text-red-600 dark:bg-red-900/30' : 'bg-indigo-600 text-white hover:bg-indigo-700'}">
-                    ${isInscribed ? 'Cancelar' : 'Inscribirme'}
-                </button>
+                <div class="flex gap-2">
+                    ${isDelegado() ? `<button onclick="deleteEvent(${e.id})" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-red-100 text-red-600 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-900/50 transition"><i class="fas fa-trash"></i></button>` : ''}
+                    <button onclick="toggleInscribe(${e.id})" class="px-4 py-1.5 rounded-lg text-xs font-bold transition whitespace-nowrap ${isInscribed ? 'bg-red-100 text-red-600 dark:bg-red-900/30' : 'bg-indigo-600 text-white hover:bg-indigo-700'}">
+                        ${isInscribed ? 'Cancelar' : 'Inscribirme'}
+                    </button>
+                </div>
             </div>
         </div>
     `}).join('');
+}
+
+function deleteEvent(id) {
+    if (confirm("¿Seguro que deseas cancelar este evento?")) {
+        globalEvents = globalEvents.filter(e => e.id !== id);
+        localStorage.setItem('app_global_events', JSON.stringify(globalEvents));
+        renderGlobalEvents();
+    }
 }
 
 function toggleInscribe(id) {
