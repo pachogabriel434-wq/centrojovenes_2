@@ -142,11 +142,19 @@ function renderHomeFeed() {
                 ${isDocente() ? `<button onclick="deleteHomePost(${n.id})" class="ml-auto text-slate-300 hover:text-red-500 transition-colors p-2"><i class="fas fa-trash-alt"></i></button>` : ''}
             </div>
             <div class="prose dark:prose-invert max-w-none">
-                <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">${n.content.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" class="text-blue-500 font-bold underline">$1</a>')}</p>
+                <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-4">${n.content.replace(/(https?:\/\/[^\s]+)/g, '').trim()}</p>
             </div>
-            ${n.image ? `<div class="rounded-3xl overflow-hidden border dark:border-slate-700 shadow-inner max-h-96">
-                <img src="${n.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" onerror="this.parentElement.style.display='none'">
-            </div>` : ''}
+            ${n.image ? (isImageUrl(n.image) ? `
+                <div class="rounded-3xl overflow-hidden border dark:border-slate-700 shadow-inner max-h-96">
+                    <img src="${n.image}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                </div>
+            ` : `
+                <div class="mt-2">
+                    <a href="${n.image}" target="_blank" class="inline-flex items-center gap-3 bg-blue-600 text-white px-8 py-3.5 rounded-2xl font-black text-[11px] uppercase tracking-widest hover:bg-blue-700 transition shadow-lg shadow-blue-500/20">
+                        <i class="fas fa-external-link-alt"></i> Acceder al sitio compartido
+                    </a>
+                </div>
+            `) : ''}
         </div>
     `).join('');
 }

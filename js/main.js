@@ -32,6 +32,13 @@ function isAdmin() { return getUserRole(currentUser) === 'admin'; }
 function isDelegado() { const r = getUserRole(currentUser); return r === 'admin' || r === 'delegado'; }
 function isDocente() { const r = getUserRole(currentUser); return r === 'admin' || r === 'docente'; }
 
+// --- UTILIDADES GLOBALES ---
+function isImageUrl(url) {
+    if (!url) return false;
+    if (url.startsWith('data:image/')) return true;
+    return /\.(jpg|jpeg|png|webp|gif|svg|avif)$/i.test(url.split('?')[0].split('#')[0]);
+}
+
 // --- MOTOR DE NAVEGACIÓN ---
 function navigate(page) {
     const content = document.getElementById('app-content');
@@ -64,6 +71,7 @@ function navigate(page) {
         if (page === 'horarios') renderSchedule();
         if (page === 'materias') renderMaterias();
         if (page === 'instructivos') renderInstructivos();
+        if (page === 'galeria') renderGaleria();
     }
 }
 
