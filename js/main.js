@@ -9,6 +9,9 @@ let userProfiles = JSON.parse(localStorage.getItem('app_profiles') || '{}');
 let globalSubjects = JSON.parse(localStorage.getItem('app_subjects') || '[]');
 let globalNotifications = JSON.parse(localStorage.getItem('app_notifications') || '[]');
 let currentHomeCategory = 'institucional'; // Estado global de la categoría de inicio
+let currentHomeCareer = 'todas';
+let currentHomeSubject = 'todas';
+let currentHomeDateFilter = 'todos';
 
 let currentDate = new Date();
 let currentMonth = currentDate.getMonth();
@@ -58,20 +61,36 @@ function navigate(page) {
         updateNotifications();
     }
 
-    const template = document.getElementById(`tpl-${page}`);
-    if (template) {
-        if (content) content.innerHTML = template.innerHTML;
-        if (title) title.innerText = page.toUpperCase();
-        
-        if (page === 'login') initLogin();
-        if (page === 'home') renderHome();
-        if (page === 'perfil') initProfile();
-        if (page === 'calendario') renderCalendar();
-        if (page === 'foro') renderForo();
-        if (page === 'horarios') renderSchedule();
-        if (page === 'materias') renderMaterias();
-        if (page === 'instructivos') renderInstructivos();
-        if (page === 'galeria') renderGaleria();
+    const templateId = `tpl-${page}`;
+    const template = document.getElementById(templateId);
+
+    if (!template) {
+        console.error(`Error: No se encontró el template con ID ${templateId}`);
+        if (page !== 'login') navigate('home');
+        return;
+    }
+
+    if (content) {
+        content.innerHTML = template.innerHTML;
+        if (title) title.innerText = page === 'home' ? 'INICIO' : page.toUpperCase().replace('-', ' ');
+    }
+
+    // Ejecutar inicialización del componente
+    switch(page) {
+        case 'login': initLogin(); break;
+        case 'home': renderHome(); break;
+        case 'perfil': initProfile(); break;
+        case 'calendario': renderCalendar(); break;
+        case 'foro': renderForo(); break;
+        case 'horarios': renderSchedule(); break;
+        case 'materias': renderMaterias(); break;
+        case 'instructivos': renderInstructivos(); break;
+        case 'galeria': renderGaleria(); break;
+        case 'documentos': 
+            if (typeof renderDocumentos === 'function') {
+                setTimeout(renderDocumentos, 10); // Un pequeño delay para asegurar el DOM
+            }
+            break;
     }
 }
 
