@@ -192,7 +192,10 @@ function updateFilterActiveStates() {
 function postToHome() {
     const text = document.getElementById('home-post-input').value;
     const url = document.getElementById('home-post-url').value;
-    if (!text.trim()) return;
+    if (!text.trim()) {
+        showToast("El contenido de la publicación no puede estar vacío", "warning");
+        return;
+    }
     
     const profile = userProfiles[currentUser] || {};
     const authorName = profile.nickname || currentUser.split('@')[0];

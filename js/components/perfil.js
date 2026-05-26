@@ -228,13 +228,18 @@ function saveProfileData() {
         userProfiles[currentUser] = {};
     }
     
-    if (nickname) userProfiles[currentUser].nickname = nickname;
-    userProfiles[currentUser].avatar = avatar; 
+    if (!nickname || !dni || !dob || !career || !desc) {
+        showToast("Todos los campos (excepto la contraseña) son obligatorios", "warning");
+        return;
+    }
+
+    userProfiles[currentUser].nickname = nickname;
+    userProfiles[currentUser].avatar = avatar;
     userProfiles[currentUser].dni = dni;
     userProfiles[currentUser].dob = dob;
     userProfiles[currentUser].career = career;
     userProfiles[currentUser].desc = desc;
-    
+
     if (password) {
         userProfiles[currentUser].password = password;
     }

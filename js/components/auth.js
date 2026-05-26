@@ -35,8 +35,13 @@ document.body.insertAdjacentHTML('beforeend', `
 function initLogin() {
     document.getElementById('form-login').onsubmit = (e) => {
         e.preventDefault();
-        const email = document.getElementById('login-email').value;
-        const pass = document.getElementById('login-password').value;
+        const email = document.getElementById('login-email').value.trim();
+        const pass = document.getElementById('login-password').value.trim();
+
+        if (!email || !pass) {
+            showToast("Por favor, completa todos los campos", "warning");
+            return;
+        }
 
         if (userProfiles[email] && userProfiles[email].password) {
             if (userProfiles[email].password !== pass) {
