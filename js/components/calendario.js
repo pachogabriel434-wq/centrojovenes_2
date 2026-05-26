@@ -90,7 +90,11 @@ function renderCalendar() {
         // Clic en un día vacío para agregar nota manual
         dateClick: function(info) {
             showModalPrompt("Nueva Nota", "Escribe un recordatorio para este día:", "", (val) => {
-                if (val) {
+                if (val !== null) {
+                    if (val.trim() === "") {
+                        showToast("La nota no puede estar vacía", "warning");
+                        return;
+                    }
                     const d = info.date;
                     const key = `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
                     userEvents[currentUser][key] = val;
@@ -107,7 +111,10 @@ function renderCalendar() {
             const current = userEvents[currentUser][key];
             showModalPrompt("Editar Evento", "Modifica tu nota (borra todo para eliminar):", current, (val) => {
                 if (val === null) return;
-                if (val.trim() === "") delete userEvents[currentUser][key];
+                if (val.trim() === "") {
+                    showToast("Si deseas eliminar el evento, por favor usa la opción de cancelar o mantén el texto", "warning");
+                    return;
+                }
                 else userEvents[currentUser][key] = val;
                 localStorage.setItem('app_events', JSON.stringify(userEvents));
                 showToast("Cambios guardados", "success");

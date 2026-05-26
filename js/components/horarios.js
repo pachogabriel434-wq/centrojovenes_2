@@ -69,6 +69,10 @@ function editSubject(rowIndex, dayKey) {
     const currentVal = userSchedules[currentUser][rowIndex][dayKey];
     showModalPrompt("Editar Horario", "Ingresa el nombre de la materia o actividad:", currentVal, (newVal) => {
         if (newVal !== null) {
+            if (newVal.trim() === "") {
+                showToast("El campo no puede estar vacío", "warning");
+                return;
+            }
             userSchedules[currentUser][rowIndex][dayKey] = newVal;
             localStorage.setItem('app_schedules', JSON.stringify(userSchedules));
             showToast("Horario actualizado correctamente", "success");

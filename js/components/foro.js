@@ -76,7 +76,10 @@ function renderForo() {
 function saveForumPost() {
     const input = document.getElementById('forum-input');
     const content = input.value.trim();
-    if (!content) return;
+    if (!content) {
+        showToast("No puedes publicar una consulta vacía", "warning");
+        return;
+    }
     const profile = userProfiles[currentUser] || {};
     const newPost = {
         id: Date.now(),
@@ -99,7 +102,10 @@ function toggleReplyBox(id) { document.getElementById(`reply-box-${id}`).classLi
 function sendReply(postId) {
     const input = document.getElementById(`input-reply-${postId}`);
     const content = input.value.trim();
-    if (!content) return;
+    if (!content) {
+        showToast("La respuesta no puede estar vacía", "warning");
+        return;
+    }
     const profile = userProfiles[currentUser] || {};
     const postIndex = forumPosts.findIndex(p => p.id === postId);
     if (postIndex !== -1) {

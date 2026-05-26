@@ -218,6 +218,10 @@ function saveSubject() {
         showToast("El nombre de la materia es obligatorio", "warning");
         return;
     }
+    if (!desc) {
+        showToast("La descripción de la materia es obligatoria", "warning");
+        return;
+    }
     if (!teacher) teacher = userProfiles[currentUser]?.nickname || currentUser.split('@')[0];
     
     globalSubjects.push({ id: Date.now(), name, desc, teacher: teacher, posts: [] });
@@ -287,7 +291,10 @@ async function submitTask(subjectId, postId) {
 function addComment(subjectId, postId) {
     const input = document.getElementById(`comment-input-${postId}`);
     const content = input.value.trim();
-    if (!content) return;
+    if (!content) {
+        showToast("El comentario no puede estar vacío", "warning");
+        return;
+    }
     
     const subject = globalSubjects.find(s => s.id === subjectId);
     const post = subject.posts.find(p => p.id === postId);
